@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   createUser,
   getUserById,
-  getUsers
+  getUsers,
 } from '../controllers/users';
 
 const usersRouter = Router();

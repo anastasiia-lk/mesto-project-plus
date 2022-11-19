@@ -1,12 +1,24 @@
 // app.ts — входной файл
-import express from 'express';
+import express, { NextFunction, Response } from 'express';
 import mongoose from 'mongoose';
+import usersRouter from './routes/users';
+
+mongoose.connect('mongodb://localhost:27017/mestodb');
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
-// подключаемся к серверу MongoiDB
-mongoose.connect('mongodb://localhost:27017/mestodb');
+// app.use((req: any, _res: Response, next: NextFunction) => {
+//   req.user = {
+//     _id: '63792c5df41fa295d3b91bd6',
+//   };
 
-// подключаем мидлвары, роуты и всё остальное...
+//   next();
+// });
+app.use(express.json());
+app.use('/users', usersRouter);
 
-app.listen(3000);
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+});
