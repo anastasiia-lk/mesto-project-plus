@@ -1,10 +1,12 @@
-// запустите этот файл и перейдите
-// в браузере по адресу: http://localhost:3000/
-import http from 'http';
+// app.ts — входной файл
+import express from 'express';
+import mongoose from 'mongoose';
 
-// передадим обработчик
-const server = http.createServer(() => {
-  console.log('Пришёл запрос!');
-});
+const app = express();
 
-server.listen(3000);
+// подключаемся к серверу MongoiDB
+mongoose.connect('mongodb://localhost:27017/mestodb');
+
+// подключаем мидлвары, роуты и всё остальное...
+
+app.listen(3000);
