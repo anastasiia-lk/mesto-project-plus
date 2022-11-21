@@ -35,7 +35,7 @@ export const deleteCard = (req: Request, res: Response) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+        return res.status(NOT_FOUND_ERROR).send({ message: 'Карточка не найдена' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
@@ -53,7 +53,7 @@ export const setLike = (req: CustomRequest, res: Response) => {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+        return res.status(NOT_FOUND_ERROR).send({ message: 'Карточка не найдена' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });

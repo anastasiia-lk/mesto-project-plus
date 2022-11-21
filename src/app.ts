@@ -1,6 +1,7 @@
 // app.ts — входной файл
 import express, { NextFunction, Response, Request } from 'express';
 import mongoose from 'mongoose';
+import { NOT_FOUND_ERROR } from './utils/constants';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
 
@@ -28,7 +29,7 @@ app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
 app.use((req: Request, res: Response) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+  res.status(NOT_FOUND_ERROR).send({ message: 'Ресурс не найден' });
 });
 
 app.listen(PORT, () => {
