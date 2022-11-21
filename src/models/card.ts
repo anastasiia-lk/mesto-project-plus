@@ -1,10 +1,11 @@
 import { Schema, model, ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 
 interface ICard {
   name: string;
   link: string;
   owner: ObjectId;
-  likes: ObjectId[];
+  likes: ReadonlyArray<mongoose.Types.ObjectId>;
   createdAt: Date;
 }
 
@@ -24,7 +25,10 @@ const cardSchema = new Schema<ICard>({
     ref: 'user',
     required: true,
   },
-  likes: { type: [Schema.Types.ObjectId], ref: 'user', default: [] },
+  likes: [{
+    type: Schema.Types.ObjectId,
+    default: [],
+  }],
   createdAt: {
     type: Date,
     default: Date.now(),
