@@ -1,15 +1,15 @@
-import { Schema, model } from 'mongoose';
-import { IUser } from './user';
+import { Schema, model, ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 
 interface ICard {
   name: string;
   link: string;
-  owner: IUser;
-  likes: string[];
+  owner: ObjectId;
+  likes: ReadonlyArray<mongoose.Types.ObjectId>;
   createdAt: Date;
 }
 
-const cardSchema = new Schema({
+const cardSchema = new Schema<ICard>({
   name: {
     type: String,
     minLength: 2,
@@ -23,12 +23,16 @@ const cardSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref: 'user',
+    required: true,
   },
-  likes: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+  likes: [{
+    type: Schema.Types.ObjectId,
+    default: [],
+  }],
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now(),
   },
 });
 
-export default model<ICard>('card', cardSchema);
+export default model('card', cardSchema);

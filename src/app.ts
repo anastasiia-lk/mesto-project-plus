@@ -1,8 +1,15 @@
 // app.ts — входной файл
-import express, { NextFunction, Response } from 'express';
+import express, { NextFunction, Response, Request } from 'express';
 import mongoose from 'mongoose';
+import { NOT_FOUND_ERROR } from './utils/constants';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
+
+export interface CustomRequest extends Request {
+  user?: {
+    _id: string
+  }
+}
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -10,7 +17,7 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use((req: any, _res: Response, next: NextFunction) => {
+app.use((req: CustomRequest, _res: Response, next: NextFunction) => {
   req.user = {
     _id: '63792c5df41fa295d3b91bd6',
   };
@@ -20,6 +27,10 @@ app.use((req: any, _res: Response, next: NextFunction) => {
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
+
+app.use((req: Request, res: Response) => {
+  res.status(NOT_FOUND_ERROR).send({ message: 'Ресурс не найден' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
