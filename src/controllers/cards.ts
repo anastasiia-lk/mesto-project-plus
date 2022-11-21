@@ -18,7 +18,7 @@ export const getCards = (_req: Request, res: Response) => {
     .catch((err) => res.status(DEFAULT_ERROR).send({ message: err.message }));
 };
 
-export const createCard = (req: any, res: Response) => {
+export const createCard = (req: CustomRequest, res: Response) => {
   const { name, link } = req.body;
   Card.create({
     name,
@@ -41,7 +41,7 @@ export const setLike = (req: CustomRequest, res: Response) => {
     { $addToSet: { likes: req.user && req.user._id } },
     { new: true },
   )
-    .then((card) => res.send({ data: card?.likes }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => res.status(NOT_FOUND_ERROR).send({ message: err.message }));
 };
 
@@ -51,6 +51,6 @@ export const removeLike = (req: CustomRequest, res: Response) => {
     { $pull: { likes: req.user && req.user._id } },
     { new: true },
   )
-    .then((card) => res.send({ data: card?.likes }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => res.status(NOT_FOUND_ERROR).send({ message: err.message }));
 };
