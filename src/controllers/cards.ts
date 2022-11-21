@@ -11,7 +11,7 @@ export interface CustomRequest extends Request {
 export const getCards = (_req: Request, res: Response) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch((err) => res.status(DEFAULT_ERROR).send({ message: err.message }));
+    .catch(() => res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' }));
 };
 
 export const createCard = (req: CustomRequest, res: Response) => {
@@ -19,16 +19,26 @@ export const createCard = (req: CustomRequest, res: Response) => {
   Card.create({
     name,
     link,
-    owner: req.user._id,
+    owner: req.user && req.user._id,
   })
     .then((card) => res.send(card))
-    .catch((err) => res.status(INVALID_DATA_ERROR).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+    });
 };
 
 export const deleteCard = (req: Request, res: Response) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => res.send(card))
-    .catch((err) => res.status(NOT_FOUND_ERROR).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      }
+      return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+    });
 };
 
 export const setLike = (req: CustomRequest, res: Response) => {
@@ -38,7 +48,15 @@ export const setLike = (req: CustomRequest, res: Response) => {
     { new: true },
   )
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(NOT_FOUND_ERROR).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
+      }
+      if (err.name === 'CastError') {
+        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      }
+      return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+    });
 };
 
 export const removeLike = (req: CustomRequest, res: Response) => {
@@ -48,5 +66,5 @@ export const removeLike = (req: CustomRequest, res: Response) => {
     { new: true },
   )
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(NOT_FOUND_ERROR).send({ message: err.message }));
+    .catch(() => res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' }));
 };
