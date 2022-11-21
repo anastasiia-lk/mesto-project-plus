@@ -1,16 +1,12 @@
 import { Request, Response } from 'express';
 import Card from '../models/card';
+import { INVALID_DATA_ERROR, NOT_FOUND_ERROR, DEFAULT_ERROR } from '../utils/constants';
 
 export interface CustomRequest extends Request {
   user?: {
     _id: string
   }
 }
-export const INVALID_DATA_ERROR = 400;
-
-export const NOT_FOUND_ERROR = 404;
-
-export const DEFAULT_ERROR = 500;
 
 export const getCards = (_req: Request, res: Response) => {
   Card.find({})
