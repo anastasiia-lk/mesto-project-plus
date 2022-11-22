@@ -61,11 +61,8 @@ export const setLike = (req: CustomRequest, res: Response) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
-      }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Карточка не найдена' });
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
