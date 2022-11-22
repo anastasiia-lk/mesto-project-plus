@@ -1,11 +1,10 @@
 import { Schema, model, ObjectId } from 'mongoose';
-import mongoose from 'mongoose';
 
 interface ICard {
   name: string;
   link: string;
   owner: ObjectId;
-  likes: Array<mongoose.Types.ObjectId>;
+  likes: ObjectId[];
   createdAt: Date;
 }
 

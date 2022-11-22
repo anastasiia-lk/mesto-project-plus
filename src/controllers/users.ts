@@ -28,7 +28,7 @@ export const getUser = (req: Request, res: Response) => {
       if (err.name === 'CastError') {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Запрашиваемый id некорректен' });
       }
-      return res.status(ERROR_SERVER).send({ message: 'На сервере произошла ошибка' });
+      return res.status(DEFAULT_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
