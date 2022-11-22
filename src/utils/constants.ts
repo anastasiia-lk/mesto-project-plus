@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 export const INVALID_DATA_ERROR = 400;
 
 export const NOT_FOUND_ERROR = 404;

@@ -4,7 +4,7 @@ import {
   INVALID_DATA_ERROR,
   NOT_FOUND_ERROR,
   DEFAULT_ERROR,
-  CustomRequest
+  CustomRequest,
 } from '../utils/constants';
 
 export const getUsers = (req: Request, res: Response) => {

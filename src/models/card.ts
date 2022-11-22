@@ -5,7 +5,7 @@ interface ICard {
   name: string;
   link: string;
   owner: ObjectId;
-  likes: ReadonlyArray<mongoose.Types.ObjectId>;
+  likes: Array<mongoose.Types.ObjectId>;
   createdAt: Date;
 }
 

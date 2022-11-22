@@ -5,7 +5,7 @@ import {
   INVALID_DATA_ERROR,
   NOT_FOUND_ERROR,
   DEFAULT_ERROR,
-  CustomRequest
+  CustomRequest,
 } from '../utils/constants';
 
 export const getCards = (_req: Request, res: Response) => {
