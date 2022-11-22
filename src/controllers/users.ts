@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
-import { INVALID_DATA_ERROR, NOT_FOUND_ERROR, DEFAULT_ERROR } from '../utils/constants';
+import {
+  INVALID_DATA_ERROR,
+  NOT_FOUND_ERROR,
+  DEFAULT_ERROR,
+  CustomRequest
+} from '../utils/constants';
 
-export interface CustomRequest extends Request {
-  user?: {
-    _id: string
-  }
-}
 export const getUsers = (req: Request, res: Response) => {
   User.find({})
     .then((users) => {
