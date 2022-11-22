@@ -17,12 +17,18 @@ export const getUsers = (req: Request, res: Response) => {
 
 export const getUser = (req: Request, res: Response) => {
   User.findById(req.params.id)
-    .then((user) => res.send({ data: user }))
+    .then((userInfo) => {
+      if (!userInfo) {
+        res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      } else {
+        res.send({ data: userInfo });
+      }
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Запрашиваемый id некорректен' });
       }
-      return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+      return res.status(ERROR_SERVER).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -44,9 +50,15 @@ export const updateUser = (req: CustomRequest, res: Response) => {
   User.findByIdAndUpdate(
     req.user && req.user._id,
     { name, about },
-    { new: true },
+    { new: true, runValidators: true },
   )
-    .then((user) => res.send({ data: user }))
+    .then((userInfo) => {
+      if (!userInfo) {
+        res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      } else {
+        res.send({ data: userInfo });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
@@ -63,9 +75,15 @@ export const updateAvatar = (req: CustomRequest, res: Response) => {
   User.findByIdAndUpdate(
     req.user && req.user._id,
     { avatar },
-    { new: true },
+    { new: true, runValidators: true },
   )
-    .then((setAvatar) => res.send({ data: setAvatar }))
+    .then((setAvatar) => {
+      if (!setAvatar) {
+        res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      } else {
+        res.send({ data: setAvatar });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
