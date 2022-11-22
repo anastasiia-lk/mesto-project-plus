@@ -51,7 +51,7 @@ export const setLike = (req: CustomRequest, res: Response) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user && req.user._id } },
-    { new: true, runValidators: true },
+    { new: true },
   )
     .then((cardInfo) => {
       if (!cardInfo) {
@@ -72,7 +72,7 @@ export const removeLike = (req: CustomRequest, res: Response) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user && req.user._id } },
-    { new: true, runValidators: true },
+    { new: true },
   )
     .then((cardInfo) => {
       if (!cardInfo) {
