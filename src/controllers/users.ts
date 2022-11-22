@@ -64,7 +64,7 @@ export const updateUser = (req: CustomRequest, res: Response) => {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Пользователь не найден' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
@@ -89,7 +89,7 @@ export const updateAvatar = (req: CustomRequest, res: Response) => {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
       if (err.name === 'CastError') {
-        return res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Пользователь не найден' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
