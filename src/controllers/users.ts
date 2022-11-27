@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import {
   INVALID_DATA_ERROR,
@@ -98,4 +99,16 @@ export const updateAvatar = (req: CustomRequest, res: Response) => {
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
+};
+
+export const login = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+  return User.findUserByCred(email, password)
+    .then((user) => {
+      res
+        .send({
+          token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
+        });
+    })
+    .catch(next);
 };

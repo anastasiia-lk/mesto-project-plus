@@ -1,5 +1,9 @@
-import { Schema, model } from 'mongoose';
+import {
+  Model, Schema, Document, model,
+} from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcrypt';
+import Unathorized from '../utils/errors/Unathorized';
 
 export interface IUser {
   email: string,
@@ -9,7 +13,12 @@ export interface IUser {
   avatar: string;
 }
 
-const userSchema = new Schema<IUser>({
+interface IUserModel extends Model<IUser> {
+  // eslint-disable-next-line no-unused-vars
+  findUserByCred: (email: string, password: string) => Promise<Document<unknown, any, IUser>>
+}
+
+const userSchema = new Schema<IUser, IUserModel>({
   email: {
     type: String,
     required: true,
@@ -42,4 +51,20 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-export default model('user', userSchema);
+userSchema.static('findUserByCred', function findUserByCred(email: string, password: string) {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Unathorized('Почта или пароль некорректны'));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((match) => {
+          if (!match) {
+            return Promise.reject(new Unathorized('Почта или пароль некорректны'));
+          }
+          return user;
+        });
+    });
+});
+
+export default model<IUser, IUserModel>('user', userSchema);
