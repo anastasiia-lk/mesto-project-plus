@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { NOT_FOUND_ERROR } from './utils/constants';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
+import { login, createUser } from './controllers/users';
 
 export interface CustomRequest extends Request {
   user?: {
@@ -25,6 +26,10 @@ app.use((req: CustomRequest, _res: Response, next: NextFunction) => {
   next();
 });
 app.use(express.json());
+
+app.post('/signin', login);
+app.post('/signup', createUser);
+
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 
