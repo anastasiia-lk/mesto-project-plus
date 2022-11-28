@@ -112,3 +112,20 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
     })
     .catch(next);
 };
+
+export const getCurrentUser = (req: CustomRequest, res: Response) => {
+  User.findById(req.user && req.user._id)
+    .then((userInfo) => {
+      if (!userInfo) {
+        res.status(NOT_FOUND_ERROR).send({ message: 'Пользователь не найден' });
+      } else {
+        res.send({ data: userInfo });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Запрашиваемый id некорректен' });
+      }
+      return res.status(DEFAULT_ERROR).send({ message: 'На сервере произошла ошибка' });
+    });
+};
