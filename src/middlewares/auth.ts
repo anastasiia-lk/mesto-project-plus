@@ -1,7 +1,7 @@
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
+import { CustomRequest } from '../utils/types';
 import Unathorized from '../utils/errors/Unathorized';
-import { CustomRequest } from '../app';
 
 export default (req: CustomRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
