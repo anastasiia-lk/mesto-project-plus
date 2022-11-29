@@ -1,5 +1,7 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Card from '../models/card';
+import NotFound from '../utils/errors/NotFound';
+import NotAllowed from '../utils/errors/NotAllowed';
 
 import {
   INVALID_DATA_ERROR,
@@ -30,18 +32,24 @@ export const createCard = (req: CustomRequest, res: Response) => {
     });
 };
 
-export const deleteCard = (req: Request, res: Response) => {
-  Card.findByIdAndDelete(req.params.cardId)
+export const deleteCard = (req: CustomRequest, res: Response, next: NextFunction) => {
+  Card.findById(req.params.cardId)
     .then((cardInfo) => {
       if (!cardInfo) {
-        res.status(NOT_FOUND_ERROR).send({ message: 'Карточка по не найдена' });
+        throw new NotFound('Карточка не найдена');
+      } else if (req.user && req.user._id && cardInfo.owner.toString() !== req.user._id) {
+        throw new NotAllowed('Недостаточно прав для удаления');
       } else {
-        res.send({ data: cardInfo });
+        Card.deleteOne({ _id: req.params.cardId })
+          .then(() => {
+            res.send({ message: 'Успешно' });
+          })
+          .catch(next);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(INVALID_DATA_ERROR).send({ message: 'Карточка не найдена' });
+        return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
       return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
     });
