@@ -7,12 +7,18 @@ import {
   getCurrentUser,
 } from '../controllers/users';
 
+import {
+  getUserValidation,
+  updateUserValidation,
+  updateAvatarValidation,
+} from '../utils/validation';
+
 const usersRouter = Router();
 
 usersRouter.get('/', getUsers);
 usersRouter.get('/me', getCurrentUser);
-usersRouter.get('/:id', getUser);
-usersRouter.patch('/me', updateUser);
-usersRouter.patch('/me/avatar', updateAvatar);
+usersRouter.get('/:id', getUserValidation, getUser);
+usersRouter.patch('/me', updateUserValidation, updateUser);
+usersRouter.patch('/me/avatar', updateAvatarValidation, updateAvatar);
 
 export default usersRouter;

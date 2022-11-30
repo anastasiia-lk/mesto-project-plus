@@ -7,6 +7,10 @@ import auth from './middlewares/auth';
 import { login, createUser } from './controllers/users';
 import { NOT_FOUND_ERROR } from './utils/constants';
 import { requestLogger, errorLogger } from './middlewares/logger';
+import {
+  loginValidation,
+  createUserValidation,
+} from './utils/validation';
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -18,8 +22,8 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', loginValidation, login);
+app.post('/signup', createUserValidation, createUser);
 
 app.use(auth);
 
