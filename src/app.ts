@@ -6,6 +6,7 @@ import cardsRouter from './routes/cards';
 import auth from './middlewares/auth';
 import { login, createUser } from './controllers/users';
 import { NOT_FOUND_ERROR } from './utils/constants';
+import { requestLogger, errorLogger } from './middlewares/logger';
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
@@ -14,6 +15,8 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(express.json());
+
+app.use(requestLogger);
 
 app.post('/signin', login);
 app.post('/signup', createUser);
@@ -26,5 +29,7 @@ app.use('/cards', cardsRouter);
 app.use((req: Request, res: Response) => {
   res.status(NOT_FOUND_ERROR).send({ message: 'Ресурс не найден' });
 });
+
+app.use(errorLogger);
 
 app.listen(PORT);
