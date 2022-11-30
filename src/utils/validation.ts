@@ -32,6 +32,9 @@ const VALID_PASS = Joi.string().required().messages({
   'any.required': 'Должен быть указан',
   'string.empty': 'Не может быть пустым',
 });
+const VALID_LINK = Joi.string().required().messages({
+  'any.required': 'Должна быть указана',
+});
 
 export const getUserValidation = celebrate({
   [Segments.PARAMS]: Joi.object().keys({
@@ -66,5 +69,18 @@ export const createUserValidation = celebrate({
     name: VALID_NAME,
     about: VALID_ABOUT,
     avatar: VALID_AVATAR,
+  }),
+});
+
+export const createCardValidation = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: VALID_NAME,
+    link: VALID_LINK,
+  }),
+});
+
+export const cardValidation = celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    cardId: VALID_ID,
   }),
 });
