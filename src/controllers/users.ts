@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../utils/constants';
 import User from '../models/user';
 import {
   CustomRequest,
-} from '../utils/constants';
+} from '../utils/types';
 import NotFound from '../utils/errors/NotFound';
 import BadReq from '../utils/errors/BadReq';
 import Duplicate from '../utils/errors/Duplicate';
@@ -111,7 +112,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
     .then((user) => {
       res
         .send({
-          token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
+          token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }),
         });
     })
     .catch(next);

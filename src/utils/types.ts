@@ -3,6 +3,6 @@ import { JwtPayload } from 'jsonwebtoken';
 
 export interface CustomRequest extends Request {
   user?: {
-    _id: JwtPayload
+    _id: JwtPayload | string
   }
 }
