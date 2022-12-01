@@ -2,8 +2,7 @@ import { JwtPayload, verify } from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
 import { CustomRequest } from '../utils/types';
 import Unathorized from '../utils/errors/Unathorized';
-
-const { JWT_SECRET = 'super-strong-secret' } = process.env;
+import { JWT_SECRET } from '../utils/constants';
 
 export default (req: CustomRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../utils/constants';
 import User from '../models/user';
 import {
   CustomRequest,
@@ -8,8 +9,6 @@ import {
 import NotFound from '../utils/errors/NotFound';
 import BadReq from '../utils/errors/BadReq';
 import Duplicate from '../utils/errors/Duplicate';
-
-const { JWT_SECRET = 'super-strong-secret' } = process.env;
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find({})

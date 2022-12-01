@@ -13,10 +13,11 @@ import {
   loginValidation,
   createUserValidation,
 } from './utils/validation';
+import { DEFAULT_PORT, DEFAULT_DB_URL } from './utils/constants';
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect(DEFAULT_DB_URL);
 
-const { PORT = 3000 } = process.env;
+const { PORT = DEFAULT_PORT } = process.env;
 
 const app = express();
 
