@@ -12,7 +12,7 @@ export default (
     .status(statusCode)
     .send({
       message: statusCode === DEFAULT_ERROR
-        ? 'Ошибка сервера'
+        ? 'На сервере произошла ошибка'
         : message,
     });
   next();

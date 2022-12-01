@@ -3,6 +3,8 @@ import { Response, NextFunction } from 'express';
 import { CustomRequest } from '../utils/types';
 import Unathorized from '../utils/errors/Unathorized';
 
+const { JWT_SECRET = 'super-strong-secret' } = process.env;
+
 export default (req: CustomRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -12,7 +14,7 @@ export default (req: CustomRequest, res: Response, next: NextFunction) => {
   let payload;
 
   try {
-    payload = verify(authorization!.replace('Bearer ', ''), 'super-strong-secret');
+    payload = verify(authorization!.replace('Bearer ', ''), JWT_SECRET);
   } catch (err) {
     throw new Unathorized('Требуется авторизация');
   }

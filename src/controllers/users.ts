@@ -4,10 +4,12 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import {
   CustomRequest,
-} from '../utils/constants';
+} from '../utils/types';
 import NotFound from '../utils/errors/NotFound';
 import BadReq from '../utils/errors/BadReq';
 import Duplicate from '../utils/errors/Duplicate';
+
+const { JWT_SECRET = 'super-strong-secret' } = process.env;
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find({})
@@ -111,7 +113,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
     .then((user) => {
       res
         .send({
-          token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }),
+          token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }),
         });
     })
     .catch(next);

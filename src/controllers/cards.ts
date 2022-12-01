@@ -3,11 +3,12 @@ import Card from '../models/card';
 import NotFound from '../utils/errors/NotFound';
 import NotAllowed from '../utils/errors/NotAllowed';
 import BadReq from '../utils/errors/BadReq';
-
+import {
+  CustomRequest,
+} from '../utils/types';
 import {
   INVALID_DATA_ERROR,
   DEFAULT_ERROR,
-  CustomRequest,
 } from '../utils/constants';
 
 export const getCards = (_req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +39,8 @@ export const deleteCard = (req: CustomRequest, res: Response, next: NextFunction
     .then((cardInfo) => {
       if (!cardInfo) {
         throw new NotFound('Карточка не найдена');
-      } else if (req.user && req.user._id && cardInfo.owner.toString() !== req.user._id) {
+      } else
+      if (req.user && req.user._id && cardInfo.owner.toString() !== req.user._id) {
         throw new NotAllowed('Недостаточно прав для удаления');
       } else {
         Card.deleteOne({ _id: req.params.cardId })
@@ -52,7 +54,7 @@ export const deleteCard = (req: CustomRequest, res: Response, next: NextFunction
       if (err.name === 'CastError') {
         return res.status(INVALID_DATA_ERROR).send({ message: 'Переданы некорректные данные' });
       }
-      return res.status(DEFAULT_ERROR).send({ message: 'Ошибка сервера' });
+      return res.status(DEFAULT_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
